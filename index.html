@@ -302,6 +302,7 @@ d3.json("data.json").then((data) => {
 
     // group all the labels so we can get their size later on
     let toolTipLabels = tooltip.append("g")
+        .attr("id", "tooltipText");
     toolTipLabels.selectAll("text")
         .data(options.labelNames)
         .enter()
@@ -363,11 +364,22 @@ d3.json("data.json").then((data) => {
             .style("display", water ? null : "none")
             .attr("transform", `translate(${mouseX + 30},${mouseY + (16 * i)})`)
             .text(`Niveau d'eau : ${water}cm`);
+
         const labelsBBox = toolTipLabels.node().getBBox();
+        const tooltipWidth = labelsBBox.width + 30;
+        const tooltipHeight = labelsBBox.height + 30;
+        let tooltipXPosition = labelsBBox.x - 15;
+        let tooltipYPosition = labelsBBox.y - 15;
+        if (tooltipXPosition + tooltipWidth > options.sizes.width) {
+            tooltipXPosition = labelsBBox.x - 30 - tooltipWidth;
+            toolTipLabels.selectAll("text")
+                .enter()
+                .attr("transform", `translate(${tooltipXPosition},${console.log(this) && 15})`)
+        }
         tooltip.select("#rectangleTooltip")
-            .attr("transform", `translate(${labelsBBox.x - 15},${labelsBBox.y - 15})`)
-            .attr("width", labelsBBox.width + 30)
-            .attr("height", labelsBBox.height + 30);
+            .attr("transform", `translate(${tooltipXPosition},${tooltipYPosition})`)
+            .attr("width", tooltipWidth)
+            .attr("height", tooltipHeight);
     }
 
     /*************************************************/
