@@ -100,16 +100,9 @@
     };
 
     tick();
-    window.setInterval(tick, 842);
+    window.setInterval(tick, 842); //roughly one decimal second
 
     document.getElementById('republicanDate').innerHTML = new FlorealDate().toFullDateString()
-
-    const widthFullChart = 510;
-    const heightFullChart = 320;
-    let fullChart = d3.select("#fullWeatherChart").append("svg")
-        .attr("width", widthFullChart + 50)
-        .attr("height", heightFullChart + 100)
-        .append("g");
 
     d3.timeFormatDefaultLocale({
         "decimal": ",",
@@ -127,6 +120,12 @@
     });
 
     const options = {
+        "sizes": {
+            "width": 530,
+            "height": 315,
+            "wPad": 36,
+            "hPad": 48
+        },
         "axes": {
             "temperature": {
                 "label": "Température",
@@ -168,6 +167,12 @@
         "labelNames": ["timeLabel", "temperatureLabel", "pressureLabel", "lightLabel", "waterLabel"]
     }
 
+    let fullChart = d3.select("#fullWeatherChart").append("svg")
+    .attr("width", options.sizes.width + 2*options.sizes.wPad)
+    .attr("height", options.sizes.height + 2*options.sizes.hPad)
+    .append("g")
+    .attr("transform", `translate(${options.sizes.wPad},5)`);
+
     // Get the data
 d3.json("data.json").then((data) => {
     data = data.Items;
@@ -184,19 +189,19 @@ d3.json("data.json").then((data) => {
     // set the ranges
     const timeAxis = d3.scaleTime()
         .domain(d3.extent(data, d => d.timestamp ))
-        .range([0, widthFullChart]);
+        .range([0, options.sizes.width]);
     const temperatureAxis = d3.scaleLinear()
         .domain([0, d3.max(data, d => Math.max(d.temperature) )])
-        .range([heightFullChart, 0]);
+        .range([options.sizes.height, 0]);
     const pressureAxis = d3.scaleLinear()
         .domain(d3.extent(data, d => d.pressure ))
-        .range([heightFullChart, 0]);
+        .range([options.sizes.height, 0]);
     const lightAxis = d3.scaleLinear()
         .domain([0, d3.max(data, d => Math.max(d.light) )])
-        .range([heightFullChart, 0]);
+        .range([options.sizes.height, 0]);
     const waterLevelAxis = d3.scaleLinear()
         .domain ([0, 400])
-        .range([heightFullChart, 0]);
+        .range([options.sizes.height, 0]);
 
     // Add the waterLine path and area.
     fullChart.append("path")
@@ -208,7 +213,7 @@ d3.json("data.json").then((data) => {
                 .curve(d3.curveStepAfter)
                 .defined(d => d.waterLevel)
                 .x(d => timeAxis(d.timestamp))
-                .y0(heightFullChart)
+                .y0(options.sizes.height)
                 .y1(d => waterLevelAxis(d.waterLevel)));
 
     // Add the temperatureLine path.
@@ -246,7 +251,7 @@ d3.json("data.json").then((data) => {
 
     // Add the X Axis
     fullChart.append("g")
-        .attr("transform", `translate(0,${heightFullChart})`)
+        .attr("transform", `translate(0,${options.sizes.height})`)
         .call(d3.axisBottom(timeAxis));
 
     // Add the temperature Axis
@@ -262,13 +267,13 @@ d3.json("data.json").then((data) => {
     // Add the water Axis
     fullChart.append("g")
         .attr("class", "water axisSteelBlue")
-        .attr("transform", `translate(${widthFullChart}, 0 )`)
+        .attr("transform", `translate(${options.sizes.width}, 0 )`)
         .call(d3.axisLeft(waterLevelAxis));
 
     // Add the light Axis
     fullChart.append("g")
         .attr("class", "light axisOrange")
-        .attr("transform", `translate(${widthFullChart}, 0 )`)
+        .attr("transform", `translate(${options.sizes.width}, 0 )`)
         .call(d3.axisRight(lightAxis));
 
 
@@ -293,7 +298,7 @@ d3.json("data.json").then((data) => {
         .style("stroke-dasharray", "3,3")
         .style("opacity", 0.5)
         .attr("y1", 0)
-        .attr("y2", heightFullChart);
+        .attr("y2", options.sizes.height);
 
     // group all the labels so we can get their size later on
     let toolTipLabels = tooltip.append("g")
@@ -306,8 +311,8 @@ d3.json("data.json").then((data) => {
 
     // append the rectangle to capture mouse
     fullChart.append("rect")
-        .attr("width", widthFullChart)
-        .attr("height", heightFullChart)
+        .attr("width", options.sizes.width)
+        .attr("height", options.sizes.height)
         .style("fill", "none")
         .style("pointer-events", "all")
         .on("mouseover", () => tooltip.style("display", null))
@@ -381,7 +386,7 @@ d3.json("data.json").then((data) => {
                 .style("opacity", d.value.line.active ? 1 : 0.1);
         })
         .attr('class', 'legend')
-        .attr('transform', (d, i) => `translate(${ i * 120},${heightFullChart + 30})`)
+        .attr('transform', (d, i) => `translate(${ i * 120},${options.sizes.height + 30})`)
     legend.append('rect')
         .attr("class", d => d.key)
         .attr('width', legendRectSize)
