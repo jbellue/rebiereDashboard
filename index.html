@@ -337,50 +337,57 @@ d3.json("data.json").then((data) => {
         tooltip.select("#verticalTooltipLine")
             .attr("transform", `translate(${mouseX},0)`);
 
+        toolTipLabels.attr("transform", `translate(${mouseX + 30},${mouseY})`)
+
         toolTipLabels.select(`#${options.labelNames[0]}`)
-            .attr("transform", `translate(${mouseX + 30},${mouseY - 8})`)
+            .attr("transform", `translate(0,-8)`)
             .text(formatTime(date));
+
 
         let i = 0;
         if (temperature) ++i;
         toolTipLabels.select(`#${options.labelNames[1]}`)
             .style("display", temperature ? null : "none")
-            .attr("transform", `translate(${mouseX + 30},${mouseY + (16 * i)})`)
+            .attr("transform", `translate(0,${16 * i})`)
             .text(`Température : ${temperature}°C`);
 
         if (pressure) ++i;
         toolTipLabels.select(`#${options.labelNames[2]}`)
             .style("display", pressure ? null : "none")
-            .attr("transform", `translate(${mouseX + 30},${mouseY + (16 * i)})`)
+            .attr("transform", `translate(0,${16 * i})`)
             .text(`Pression : ${pressure}hPa`);
 
         if (light) ++i;
         toolTipLabels.select(`#${options.labelNames[3]}`)
             .style("display", light ? null : "none")
-            .attr("transform", `translate(${mouseX + 30},${mouseY + (16 * i)})`)
+            .attr("transform", `translate(0,${16 * i})`)
             .text(`Luminosité : ${light}`);
 
         if (water) ++i;
         toolTipLabels.select(`#${options.labelNames[4]}`)
             .style("display", water ? null : "none")
-            .attr("transform", `translate(${mouseX + 30},${mouseY + (16 * i)})`)
+            .attr("transform", `translate(0,${16 * i})`)
             .text(`Niveau d'eau : ${water}cm`);
 
         const labelsBBox = toolTipLabels.node().getBBox();
-        const tooltipWidth = labelsBBox.width + 30;
-        const tooltipHeight = labelsBBox.height + 30;
-        let tooltipXPosition = labelsBBox.x - 15;
-        let tooltipYPosition = labelsBBox.y - 15;
-        if (tooltipXPosition + tooltipWidth > options.sizes.width) {
-            tooltipXPosition = labelsBBox.x - 30 - tooltipWidth;
-            toolTipLabels.selectAll("text")
-                .enter()
-                .attr("transform", `translate(${tooltipXPosition},${console.log(this) && 15})`)
+        const tooltipBox = {
+            x: mouseX + 15,
+            y: mouseY - 34,
+            width: labelsBBox.width + 30,
+            height: labelsBBox.height + 30
+        }
+
+        if (tooltipBox.x + tooltipBox.width > options.sizes.width) {
+            // set the right place for the box
+            tooltipBox.x -= tooltipBox.width + 30;
+
+            // move the text to the right place
+            toolTipLabels.attr("transform", `translate(${tooltipBox.x + 15},${tooltipBox.y + 30})`)
         }
         tooltip.select("#rectangleTooltip")
-            .attr("transform", `translate(${tooltipXPosition},${tooltipYPosition})`)
-            .attr("width", tooltipWidth)
-            .attr("height", tooltipHeight);
+            .attr("transform", `translate(${tooltipBox.x},${tooltipBox.y})`)
+            .attr("width", tooltipBox.width)
+            .attr("height", tooltipBox.height);
     }
 
     /*************************************************/
