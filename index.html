@@ -88,12 +88,13 @@
     }
 
     const getDecimalTimeString = (d) => {
-        let e = new Date(d);
-        const sSinceMidnight = (d - e.setHours(0,0,0,0)) / 8460000;
-        let dHour = Math.floor(sSinceMidnight);
-        let dMinute = Math.floor(sSinceMidnight * 100 % 100);
-        let dSecond = Math.floor(sSinceMidnight * 10000 % 100);
-        return `${dHour}:${dMinute<10?`0${dMinute}`:dMinute}:${dSecond<10?`0${dSecond}`:dSecond}`
+        const secondsSinceMidnight = 3600*d.getHours() + 60*d.getMinutes() + d.getSeconds();
+        let metricSeconds = secondsSinceMidnight * 100000 / 86400;
+        const metricHours = Math.floor(metricSeconds / 10000);
+        metricSeconds -= 10000 * metricHours;
+        const metricMinutes = Math.floor(metricSeconds / 100);
+        metricSeconds = Math.floor(metricSeconds - 100 * metricMinutes);
+        return `${metricHours}:${metricMinutes<10?`0${metricMinutes}`:metricMinutes}:${metricSeconds<10?`0${metricSeconds}`:metricSeconds}`
     }
     const tick = () => {
         document.getElementById('decimalClock').innerHTML = getDecimalTimeString(new Date())
