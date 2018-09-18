@@ -420,7 +420,7 @@ d3.json("data.json").then((data) => {
         }
         if(boxMoved) {
             // move the text to the right place
-            toolTipLabels.attr("transform", `translate(${tooltipBox.x + 15},${tooltipBox.y + 30})`)
+            toolTipLabels.attr("transform", `translate(${tooltipBox.x + 15},${tooltipBox.y + 34})`)
         }
         tooltip.select("#rectangleTooltip")
             .attr("transform", `translate(${tooltipBox.x},${tooltipBox.y})`)
