@@ -418,6 +418,10 @@ d3.json("data.json").then((data) => {
             tooltipBox.y += options.sizes.height - tooltipBox.y - tooltipBox.height;
             boxMoved = true;
         }
+        else if (tooltipBox.y < 0) {
+            tooltipBox.y = 0;
+            boxMoved = true;
+        }
         if(boxMoved) {
             // move the text to the right place
             toolTipLabels.attr("transform", `translate(${tooltipBox.x + 15},${tooltipBox.y + 34})`)
