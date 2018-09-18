@@ -279,6 +279,36 @@ d3.json("data.json").then((data) => {
 
 
     /*************************************************/
+    /*             All the legend stuff              */
+    /*************************************************/
+    var optionsList = d3.entries(options.axes);
+    const legendRectSize = 18;
+    const legendSpacing = 4;
+    let legend = fullChart.selectAll('.legend')
+        .data(optionsList)
+        .enter()
+        .append('g')
+        .on("click", d => {
+            d.value.line.active = !d.value.line.active;
+            d3.selectAll(`.${d.key}`)
+                .style("opacity", d.value.line.active ? 1 : 0.1);
+        })
+        .attr('class', 'legend')
+        .attr('transform', (d, i) => `translate(${ i * 120},${options.sizes.height + 30})`)
+    legend.append('rect')
+        .attr("class", d => d.key)
+        .attr('width', legendRectSize)
+        .attr('height', legendRectSize)
+        .style('fill', d => d.value.fillColour)
+        .style('stroke', d => d.value.colour);
+    legend.append('text')
+        .attr("class", d => d.key)
+        .attr('x', legendRectSize + legendSpacing)
+        .attr('y', legendRectSize - legendSpacing)
+        .text(d => `${d.value.label}${d.value.unit?` (${d.value.unit})`:''}`);
+
+
+    /*************************************************/
     /*             All the tooltip stuff             */
     /*************************************************/
     let tooltip = fullChart.append("g")
@@ -389,35 +419,6 @@ d3.json("data.json").then((data) => {
             .attr("width", tooltipBox.width)
             .attr("height", tooltipBox.height);
     }
-
-    /*************************************************/
-    /*             All the legend stuff              */
-    /*************************************************/
-    var optionsList = d3.entries(options.axes);
-    const legendRectSize = 18;
-    const legendSpacing = 4;
-    let legend = fullChart.selectAll('.legend')
-        .data(optionsList)
-        .enter()
-        .append('g')
-        .on("click", d => {
-            d.value.line.active = !d.value.line.active;
-            d3.selectAll(`.${d.key}`)
-                .style("opacity", d.value.line.active ? 1 : 0.1);
-        })
-        .attr('class', 'legend')
-        .attr('transform', (d, i) => `translate(${ i * 120},${options.sizes.height + 30})`)
-    legend.append('rect')
-        .attr("class", d => d.key)
-        .attr('width', legendRectSize)
-        .attr('height', legendRectSize)
-        .style('fill', d => d.value.fillColour)
-        .style('stroke', d => d.value.colour);
-    legend.append('text')
-        .attr("class", d => d.key)
-        .attr('x', legendRectSize + legendSpacing)
-        .attr('y', legendRectSize - legendSpacing)
-        .text(d => `${d.value.label}${d.value.unit?` (${d.value.unit})`:''}`);
 
     let liquidFillGaugeConfig = liquidFillGaugeDefaultSettings();
     liquidFillGaugeConfig.minValue = 0;
