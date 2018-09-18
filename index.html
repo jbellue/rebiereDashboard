@@ -168,11 +168,11 @@
         "labelNames": ["timeLabel", "temperatureLabel", "pressureLabel", "lightLabel", "waterLabel"]
     }
 
-    let fullChart = d3.select("#fullWeatherChart").append("svg")
-    .attr("width", options.sizes.width + 2*options.sizes.wPad)
-    .attr("height", options.sizes.height + 2*options.sizes.hPad)
-    .append("g")
-    .attr("transform", `translate(${options.sizes.wPad},5)`);
+    const fullChart = d3.select("#fullWeatherChart").append("svg")
+        .attr("width", options.sizes.width + 2*options.sizes.wPad)
+        .attr("height", options.sizes.height + 2*options.sizes.hPad)
+        .append("g")
+            .attr("transform", `translate(${options.sizes.wPad},5)`);
 
     // Get the data
 d3.json("data.json").then((data) => {
