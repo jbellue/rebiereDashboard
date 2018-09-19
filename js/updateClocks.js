@@ -18,5 +18,8 @@ myApp.updateDecimalClock = (id) => {
 }
 
 myApp.setRepublicanDate = (id) => {
-    document.getElementById(id).innerHTML = new FlorealDate().toFullDateString();
+    const republicanDate = new FlorealDate();
+    document.getElementById(id).innerHTML = republicanDate.isComplementaryDay() ?
+          `${republicanDate.toFullDateString()}<br>${republicanDate.dayName()}`
+        : `${republicanDate.dayName()} ${republicanDate.toFullDateString()}<br>${republicanDate.dayTitle()}`;
 }
