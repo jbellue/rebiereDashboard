@@ -67,7 +67,6 @@ const options = {
 myApp.getData = (filename) => {
     return new Promise(function (resolve, reject) {
         d3.json(filename).then((data) => {
-            data = data.Items;
             const parseTime = d3.timeParse("%s");
             data.forEach(d => {
                 d.timestamp = parseTime(d.timestamp);
