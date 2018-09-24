@@ -9,6 +9,7 @@
     <script src="js/moment.min.js" language="JavaScript" type="application/javascript"></script>
     <script src="https://d3js.org/d3.v5.min.js" language="JavaScript" type="application/javascript"></script>
     <script src="js/d3-local.js" language="JavaScript" type="application/javascript"></script>
+    <script src="js/setTemperature.js" language="JavaScript" type="application/javascript"></script>
     <script src="js/liquidFillGauge.js" language="JavaScript" type="application/javascript"></script>
     <script src="js/floreal.js" language="JavaScript" type="application/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.7/chroma.min.js" type="application/javascript"></script>
@@ -55,16 +56,6 @@
     </div>
 <script language="JavaScript" type="application/javascript">
     var myApp = myApp || {};
-
-    myApp.setTemperature = (selector, value) => {
-        const elem = document.getElementById(selector);
-        elem.innerHTML = value
-        chromaScale = chroma
-            .scale('RdYlBu')
-            .domain([45, -30])
-            .mode("lab")
-        elem.style.color = chromaScale(value).hex();
-    }
 
     myApp.updateDecimalClock('decimalClock');
     myApp.setRepublicanDate('republicanDate');
