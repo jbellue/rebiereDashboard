@@ -61,7 +61,7 @@ const options = {
         },
     },
     "labelNames": ["timeLabel", "temperatureLabel", "pressureLabel", "lightLabel", "waterLabel"]
-}
+};
 
 // Get the data
 myApp.getData = (filename) => {
@@ -78,7 +78,7 @@ myApp.getData = (filename) => {
             resolve(data);
         });
     });
-}
+};
 
 myApp.drawChart = (data, id) => {
     const fullChart = d3.select(`#${id}`).append("svg")
@@ -193,7 +193,7 @@ myApp.drawChart = (data, id) => {
                 .style("opacity", d.value.line.active ? 1 : 0.1);
         })
         .attr('class', 'legend')
-        .attr('transform', (d, i) => `translate(${ i * 120},${options.sizes.height + 30})`)
+        .attr('transform', (d, i) => `translate(${ i * 120},${options.sizes.height + 30})`);
     legend.append('rect')
         .attr("class", d => d.key)
         .attr('width', legendRectSize)
@@ -266,7 +266,7 @@ myApp.drawChart = (data, id) => {
         tooltip.select("#verticalTooltipLine")
             .attr("transform", `translate(${mouseX},0)`);
 
-        toolTipLabels.attr("transform", `translate(${mouseX + 30},${mouseY})`)
+        toolTipLabels.attr("transform", `translate(${mouseX + 30},${mouseY})`);
 
         toolTipLabels.select(`#${options.labelNames[0]}`)
             .attr("transform", `translate(0,-8)`)
@@ -304,7 +304,7 @@ myApp.drawChart = (data, id) => {
             y: mouseY - 34,
             width: labelsBBox.width + 30,
             height: labelsBBox.height + 30
-        }
+        };
 
         let boxMoved = false;
         if (tooltipBox.x + tooltipBox.width > options.sizes.width) {
@@ -323,20 +323,20 @@ myApp.drawChart = (data, id) => {
         }
         if(boxMoved) {
             // move the text to the right place
-            toolTipLabels.attr("transform", `translate(${tooltipBox.x + 15},${tooltipBox.y + 34})`)
+            toolTipLabels.attr("transform", `translate(${tooltipBox.x + 15},${tooltipBox.y + 34})`);
         }
         tooltip.select("#rectangleTooltip")
             .attr("transform", `translate(${tooltipBox.x},${tooltipBox.y})`)
             .attr("width", tooltipBox.width)
             .attr("height", tooltipBox.height);
     }
-}
+};
 myApp.getLastValue = (data, key) => {
     let i = data.length - 1;
     let returnValue = data[i][key];
     while(!returnValue && i >= 0) returnValue = data[--i][key];
     return returnValue ? returnValue : -1;
-}
+};
 
 myApp.setGauge = (value, id) => {
     let liquidFillGaugeConfig = liquidFillGaugeDefaultSettings();
@@ -345,4 +345,4 @@ myApp.setGauge = (value, id) => {
     liquidFillGaugeConfig.displayPercent = false;
     liquidFillGaugeConfig.waveAnimateTime = 10000;
     loadLiquidFillGauge(id, value, liquidFillGaugeConfig);
-}
+};
