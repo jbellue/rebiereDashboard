@@ -252,6 +252,8 @@ myApp.drawChart = (data, id) => {
         .on("touchmove", mousemove);
 
     function mousemove() {
+        d3.event.stopPropagation();
+        d3.event.preventDefault();
         const mouseX = d3.touches(this)[0] ? d3.touches(this)[0][0] : d3.mouse(this)[0];
         const mouseY = d3.touches(this)[0] ? d3.touches(this)[0][1] : d3.mouse(this)[1];
         const date = timeAxis.invert(mouseX);
